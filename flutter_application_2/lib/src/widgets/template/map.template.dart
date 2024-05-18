@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 
 import '../../controllers/map.controller.dart';
 
 class MapTemplate extends StatelessWidget {
   const MapTemplate({super.key});
+
+  static const List<LatLng> points = [
+    LatLng(-33.44506735118542, -70.64628945681663),
+    LatLng(-33.43661597080002, -70.64768420543484),
+    LatLng(-33.43692037802916, -70.63598977471295),
+    LatLng(-33.44194805059744, -70.63029295219013)
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +28,28 @@ class MapTemplate extends StatelessWidget {
                 zoom: 15.0,
               ),
               markers: mapController.markers,
-              polylines: mapController.result,
+              polylines: {
+                Polyline(
+                  polylineId: const PolylineId('direction_poly'),
+                  points: PolylinePoints()
+                      .decodePolyline(
+                          'nsckEvzdnLuEt@wKhBu@ToCf@UFCOQoAq@qDc@wBYsAFaAD]Pg@\\gBXwAHQJi@`@kCP{Ab@cFBq@?yAIiAS}AwDcR}@uEcAaF]yAUaBOsAiBgOwBsQ}B_Qm@sFD_E_BcMy@qGk@mGWyBm@yEmCn@wInBaEdAqCyVKa@IUIImF~@_BZ`CrT')
+                      .map((e) => LatLng(e.latitude, e.longitude))
+                      .toList(),
+                  width: 5,
+                  color: Colors.green.withOpacity(.8),
+                )
+              },
+              polygons: {
+                Polygon(
+                  polygonId: PolygonId('1'),
+                  points: points,
+                  geodesic: true,
+                  fillColor: Colors.red.withOpacity(.3),
+                  strokeWidth: 3,
+                  strokeColor: Colors.red,
+                )
+              },
             ));
   }
 }
